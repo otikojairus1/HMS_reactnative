@@ -3,7 +3,7 @@ import {View, Text, Image} from 'react-native'
 
 import { Card, Snackbar, Headline, Button, Paragraph, TextInput} from 'react-native-paper';
 
-export default function Login({navigation}) {
+export default function AdminLogin({navigation}) {
   const [text, setText] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
@@ -28,7 +28,7 @@ export default function Login({navigation}) {
     setIsLoading(false);
     // setErrorName("working well");
     // setError(true);
-    navigation.navigate('Patient Dashboard');
+    navigation.navigate('Admin Dashboard');
 
   })
 
@@ -54,8 +54,8 @@ export default function Login({navigation}) {
         style={{ width: 200, height:200}}
        source={require('../assets/logo.png')}
       />
-      <Headline>NHS</Headline>
-      <Paragraph>Welcome back ! Sign in here</Paragraph>
+      <Headline>HMS</Headline>
+      <Paragraph>Welcome back Admin! Sign in here</Paragraph>
       </View>
      
       
@@ -79,19 +79,12 @@ export default function Login({navigation}) {
   </Button>
     </Card.Content>
     
-    <View style={{width:'100%',alignItems:'center'}}>
+    {/* <View style={{width:'100%',alignItems:'center'}}>
     <Text style={{fontSize:15}}>Dont have an account with us?</Text>
     <Button icon="pen" mode='outlined' disabled={isLoading}  onPress={() => console.log('Pressed')}>
     Create an account
   </Button>
-    </View>
-
-    <View style={{width:'100%',alignItems:'center'}}>
-    <Text style={{fontSize:15}}>Are you an admin?</Text>
-    <Button icon="pen" mode='outlined' disabled={isLoading}  onPress={() => navigation.navigate('Admin Login')}>
-   Login here 
-  </Button>
-    </View>
+    </View> */}
 
     <Snackbar
         visible={error}
