@@ -1,8 +1,8 @@
-import { View, Text,Button } from 'react-native'
+import { View, Text } from 'react-native'
 import {React, useState} from 'react'
 import CalendarPicker from 'react-native-calendar-picker';
 
-import { Appbar, TextInput, Card, Title, Paragraph,   } from 'react-native-paper';
+import { Appbar, TextInput, Card, Title, Paragraph ,Button ,Snackbar } from 'react-native-paper';
 export default function AdminDashboard({navigation}) {
 
     const _goBack = () => navigation.goBack();
@@ -11,9 +11,10 @@ export default function AdminDashboard({navigation}) {
   
     const _handleMore = () => console.log('Shown more');
     const [text, setText] = useState("");
-
-    const [date, setDate] = useState(new Date())
-    const [open, setOpen] = useState(false)
+    const onDismissSnackBar = () => setSUccess(false);
+    // const [date, setDate] = useState(new Date())
+    // const [open, setOpen] = useState(false)
+    const [success, setSUccess] = useState(false);
 
     const [selectedStartDate, setSelectedData] = useState('');
     const onDateChange = (date) =>{
@@ -60,6 +61,23 @@ export default function AdminDashboard({navigation}) {
     {/* end of date picker */}
     </Card.Content>
   </Card>
+
+  <Button icon="pen" mode='outlined' onPress={() => setSUccess(true)}>
+  Publish Meeting notice 
+  </Button>
+
+  <Snackbar
+        visible={success}
+        onDismiss={onDismissSnackBar}
+        action={{
+          label: 'got it',
+          onPress: () => {
+            // Do something
+          },
+        }}>
+        Youve successfully published the meeting notice to all staff!
+      </Snackbar>
+  
 
     {/* end of meeting card */}
     </View>
