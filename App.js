@@ -9,6 +9,7 @@ import Appointment from './Screens/Appointment'
 import ViewMessage from './Screens/ViewMessage'
 import AdminLogin from './Screens/AdminLogin'
 import AdminDashboard from './Screens/AdminDashboard'
+import ScanQR from './Screens/scanQR';
 
 
 export default function App() {
@@ -24,6 +25,7 @@ export default function App() {
           <Stack2.Screen name="Admin Login" component={AdminLogin} options={{ headerShown: false, headerTitleAlign: "center" }} />
           <Stack2.Screen name="Admin Dashboard" component={AdminDashboard} options={{ headerShown: false, headerTitleAlign: "center" }} />
           
+          <Stack2.Screen name="Scan" component={ScanQR} options={{ headerShown: false, headerTitleAlign: "center" }} />
         </Stack2.Navigator>
       </NavigationContainer>
     

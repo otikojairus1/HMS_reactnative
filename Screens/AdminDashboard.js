@@ -66,6 +66,10 @@ export default function AdminDashboard({navigation}) {
   Publish Meeting notice 
   </Button>
 
+  <Button icon="pen" mode='outlined' onPress={ ()=>{navigation.navigate('Scan')} }>
+      Attend shift
+  </Button>
+
   <Snackbar
         visible={success}
         onDismiss={onDismissSnackBar}
