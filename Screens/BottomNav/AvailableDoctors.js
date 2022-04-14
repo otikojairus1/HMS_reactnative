@@ -1,33 +1,30 @@
 import {React, useEffect, useState} from 'react';
-import { Appbar,Avatar, ActivityIndicator, Text, Paragraph, Colors, List} from 'react-native-paper';
-import {View, Dimensions ,FlatList} from 'react-native';
+import { Appbar,Avatar, ActivityIndicator, Text, Paragraph, Colors, List,
+  Button, Dialog, Portal, Provider } from 'react-native-paper';
+
+import {View, Dimensions , TouchableOpacity,FlatList} from 'react-native';
 
 
 export default function AvailableDoctors({navigation}) {
 
   let data= [];
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [listData, setListData] = useState(data);
-  useEffect(() => {
-   // DATA = [];
-      //using a fake rest api, will replace with the voters api when done
-      fetch('https://consultancy-api.herokuapp.com/api/available/doctors')
-      .then(response => response.json())
-      .then(
-        function (response){
-         console.log(response.response);
-          response.response.forEach(element => {
-            
-            data.push(element);
-           // setListData(data);
-            setIsLoading(false);
-           //console.log(data);
-          });
-        }
-          );
-         
-          
-      } );
+  const [alarm, setAlarm] = useState(false);
+  const [visible, setVisible] = useState(false);
+
+  
+  const showDialog = () => setVisible(true);
+
+  const hideDialog = () => setVisible(false);
+
+
+  const onClick = () => {
+    //console.log(alarm);
+    setAlarm((previousState)=>!previousState);
+
+  }
+ 
     const _goBack = () => navigation.goBack();
 
     const windowWidth = Dimensions.get('window').width;
@@ -48,6 +45,14 @@ export default function AvailableDoctors({navigation}) {
     />
     ); 
 
+    let bg1;
+      if (alarm){
+        bg1 = "red";
+      }else{
+        bg1 = "green";
+      
+    }
+
     if(!isLoading){
       return (
         <View>
@@ -58,12 +63,39 @@ export default function AvailableDoctors({navigation}) {
             
           </Appbar.Header>
         
-        <FlatList
+        {/* <FlatList
                 data={listData}
                 renderItem={renderItem}
                 keyExtractor={item => item.id}
               />
-        
+         */}
+
+         <TouchableOpacity onPress={onClick} style={{width:'100%',alignItems:'center', justifyContent:'center', backgroundColor:bg1, height:50, marginTop:10, borderRadius:10}}>
+              {alarm ? <Text style={{color:"#fff", fontSize:30, fontWeight:"bold"}}>Alarm ON!!!</Text>  : <Text style={{color:"#fff", fontSize:30, fontWeight:"bold"}}>RAISE ALARM</Text>    } 
+            </TouchableOpacity>    
+
+            {/* dialog */}
+
+            <View>
+            
+        <Button onPress={showDialog}>Show Dialog</Button>
+        <Portal>
+          <Dialog visible={visible} onDismiss={hideDialog}>
+            <Dialog.Title>Alert</Dialog.Title>
+            <Dialog.Content>
+              <Paragraph>This is simple dialog</Paragraph>
+            </Dialog.Content>
+            <Dialog.Actions>
+              <Button onPress={hideDialog}>Done</Button>
+            </Dialog.Actions>
+          </Dialog>
+        </Portal>
+       
+      </View>
+
+
+
+            {/* emd of dialog */}
           </View>
           );
     }else{

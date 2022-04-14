@@ -6,48 +6,44 @@ import { Card, Snackbar, Headline, Button, Paragraph, TextInput} from 'react-nat
 import { AntDesign } from '@expo/vector-icons';
 
 export default function Login({navigation}) {
-  const [text, setText] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const [title, setTitle] = React.useState("");
+  const [desc, setDesc] = React.useState("");
+  const [time, setTime] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState(false);
   const [errorname, setErrorName] = React.useState("");
-  const loadingTitle = "Signing in ...";
-  const nonLoadingTitle = "Sign in";
+  const loadingTitle = "Adding Occurence...";
+  const nonLoadingTitle = "Add Occurence";
   const onDismissSnackBar = () => setError(false);
   //code for login in
   const onLoginHandler = (e)=>{
     
-      if (text == "" || password == "" ){
-        setErrorName('Kindly provide your email and password to continue');
+      if (title == "" || desc == "" || time == "" ){
+        setErrorName('Kindly provide complete details about the occurence');
         setError(true);
     }else{
       e.preventDefault();
       setIsLoading(true);
      
       //test api, replace this with the actual api call
-      axios.post(BASE_URI+'/login',{
+      axios.post(BASE_URI+'/add/occurence',{
   
-        email: text,
-        password:password
+        time: time,
+        description:desc,
+        title:title
       })
    
     .then((response)=> {
       console.log(response.data);
       if(response.data.success == false){
         setIsLoading(false);
-        setErrorName("You Provided invalid credentials!");
+        setErrorName("We encountered a problem while working on your request!");
          setError(true);
       }else{
         setIsLoading(false);
-        // setErrorName("working well");
-        // setError(true);
-        if(response.data.userDetails.email == "admin@HNS.com"){
-          setErrorName("use admin module to login!");
-          setError(true);
-          
-        }else{
-          navigation.navigate('Patient Dashboard');
-        }
+        setErrorName("Occurence added successfully");
+         setError(true);
+    
         
       }
    
@@ -79,43 +75,42 @@ export default function Login({navigation}) {
        source={require('../assets/logo.png')}
       />
       <Headline>NHS</Headline>
-      <Paragraph>Welcome back ! Sign in here</Paragraph>
+      <Paragraph>Hello Admin ! Add an Occurence Here</Paragraph>
       </View>
      
       
     <Card.Content>
       {/* <Title>Sign in</Title> */}
       <TextInput
-      label="Email"
-      value={text}
-      onChangeText={text => setText(text)}
+      label="title"
+      value={title}
+
+      onChangeText={text => setTitle(text)}
     />
     <View style={{margin:4}}></View>
       <TextInput
-      label="Password"
-      onChangeText={text => setPassword(text)}
-      secureTextEntry
-      right={<TextInput.Icon name="eye" />}
+      label="description"
+      value={desc}
+      onChangeText={text => setDesc(text)}
+     
+      
     />
     <View style={{margin:4}}></View>
+    <TextInput
+      label="time"
+      value={time}
+      onChangeText={text => setTime(text)}
+     
+      
+    />
      <Button icon="arrow-collapse-right" loading={isLoading} disabled={isLoading} mode="contained" onPress={onLoginHandler}>
     {isLoading? loadingTitle : nonLoadingTitle}
   </Button>
     </Card.Content>
     
-    <View style={{width:'100%',alignItems:'center'}}>
-    <Text style={{fontSize:15}}>Dont have an account with us?</Text>
-    <Button icon="pen" mode='outlined' disabled={isLoading}  onPress={() => navigation.navigate('Sign up')}>
-    Create an account
-  </Button>
-    </View>
 
-    <View style={{width:'100%',alignItems:'center'}}>
-    <Text style={{fontSize:15}}>Are you an admin?</Text>
-    <Button icon="pen" mode='outlined' disabled={isLoading}  onPress={() => navigation.navigate('Admin Login')}>
-   Login here 
-  </Button>
-    </View>
+
+
 
     <Snackbar
         visible={error}

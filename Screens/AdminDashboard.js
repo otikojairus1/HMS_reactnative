@@ -1,7 +1,8 @@
 import { View, Text } from 'react-native'
 import {React, useState} from 'react'
 import CalendarPicker from 'react-native-calendar-picker';
-
+import {BASE_URI} from '../BASE_URI'
+import axios from 'axios'
 import { Appbar, TextInput, Card, Title, Paragraph ,Button ,Snackbar } from 'react-native-paper';
 export default function AdminDashboard({navigation}) {
 
@@ -11,18 +12,57 @@ export default function AdminDashboard({navigation}) {
   
     const _handleMore = () => console.log('Shown more');
     const [text, setText] = useState("");
+    const [text2, setText2] = useState("");
+    const [successMessage, setsuccessMessage] = useState("");
     const onDismissSnackBar = () => setSUccess(false);
     // const [date, setDate] = useState(new Date())
     // const [open, setOpen] = useState(false)
     const [success, setSUccess] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const [selectedStartDate, setSelectedData] = useState('');
     const onDateChange = (date) =>{
         setSelectedData(date);
     }
     const startDate = selectedStartDate ? selectedStartDate.toString() : '';
-  return (
-    <View>
+    const sendmessage = () => {
+      setLoading(true);
+      axios.post(BASE_URI+'/add/meeting',
+        {
+          title:text,
+          description:text2,
+          time:startDate
+      
+      }
+      )
+      .then((response)=>{
+        setLoading(false);
+        if(response.data.success == true){
+          setsuccessMessage('Youve successfully published the meeting notice to all staff!')
+          setSUccess(true);
+          
+        }else{
+          setsuccessMessage('A problem Occured while we were working on the processing! Try again later')
+          setSUccess(true);
+          
+        }
+
+      })
+       
+
+    }
+  
+    if (loading){
+      return(
+        <View style={{flex:1,justifyContent:"center", alignItems:"center"}}>
+        <Text>Loading...</Text>
+      </View>
+      );
+  
+
+    }else{
+      return(
+        <View>
         {/* start of appbar */}
        <Appbar.Header>
       <Appbar.BackAction onPress={_goBack} />
@@ -46,9 +86,9 @@ export default function AdminDashboard({navigation}) {
     />
          <TextInput
       label="Meeting Description"
-      value={text}
+      value={text2}
       mode={"outlined"}
-      onChangeText={text => setText(text)}
+      onChangeText={text => setText2(text)}
     />
     {/* start of date picker */}
 
@@ -62,14 +102,19 @@ export default function AdminDashboard({navigation}) {
     </Card.Content>
   </Card>
 
-  <Button icon="pen" mode='outlined' onPress={() => setSUccess(true)}>
+  <Button icon="pen" mode='outlined' onPress={sendmessage}>
   Publish Meeting notice 
   </Button>
 
   <Button icon="pen" mode='outlined' onPress={ ()=>{navigation.navigate('Scan')} }>
       Attend shift
   </Button>
-
+  <Button icon="pen" mode='outlined' onPress={ ()=>{navigation.navigate('AssignTask')} }>
+      Schedule tasks
+  </Button>
+  <Button icon="pen" mode='outlined' onPress={ ()=>{navigation.navigate('Notice')} }>
+      Daily Occurence Sheet
+  </Button>
   <Snackbar
         visible={success}
         onDismiss={onDismissSnackBar}
@@ -79,11 +124,15 @@ export default function AdminDashboard({navigation}) {
             // Do something
           },
         }}>
-        Youve successfully published the meeting notice to all staff!
+        {successMessage}
       </Snackbar>
+      {/* Youve successfully published the meeting notice to all staff! */}
   
 
     {/* end of meeting card */}
     </View>
-  )
+      );
+    }
+   
+  
 }
